@@ -31,7 +31,7 @@ class UserController extends Controller
      */
     public function create()
     {
-        return view('tambahuser');
+        return view('user_tambah');
     }
 
 
@@ -41,21 +41,45 @@ class UserController extends Controller
     public function store(Request $request)
     {
         try {
-            $validate = $request->validate([
-                'username' => 'required',
-                'password' => 'required',
-                'level' => 'required'
-            ]);
+        $validate = $request->validate([
+            'username' => 'required',
+            'password' => 'required',
+            'level' => 'required'
+        ]);
+
+        // Kirim sebagai form (kalau backend kamu tidak terima JSON)
+        $response = Http::asForm()->post('http://localhost:8080/user', $validate);
+
+        if (!$response->successful()) {
+            return back()->with('error', 'Gagal menambah user. Status: ' . $response->status() . '. Pesan: ' . $response->body());
+        }
+
+        return redirect()->route('user.index')->with('success', 'User berhasil ditambahkan!');
+    } catch (\Exception $e) {
+        return back()->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
+    }
+
+        // try {
+        //     $validate = $request->validate([
+        //         'username' => 'required',
+        //         'password' => 'required',
+        //         'level' => 'required'
+        //     ]);
 
             // Enkripsi password jika perlu
-            $validate['password'] = Hash::make($validate['password']);
+            // $validate['password'] = Hash::make($validate['password']);
+            // tadinya seperti ini karena ga pake json
+            // $response = Http::post('http://localhost:8080/user', $validate);
 
-            Http::post('http://localhost:8080/user', $validate);
+    //         // Tambahkan ini untuk mengetahui apa yang terjadi
+    //         if (!$response->successful()) {
+    //             return back()->with('error', 'Gagal menambah user. Status: ' . $response->status() . '. Pesan: ' . $response->body());
+    //         }
 
-            return redirect()->route('user.index')->with('success', 'User berhasil ditambahkan!');
-        } catch (\Exception $e) {
-            return back()->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
-        }
+    //         return redirect()->route('user.index')->with('success', 'User berhasil ditambahkan!');
+    //     } catch (\Exception $e) {
+    //         return back()->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
+    //     }
     }
 
 
@@ -72,14 +96,14 @@ class UserController extends Controller
      */
     public function edit($id)
     {
-        $res = Http::get("http://localhost:8080/user/$id/edit");
+        $res = Http::get("http://localhost:8080/user/$id");
 
         if (!$res->successful()) {
             return back()->with('error', 'Data user tidak ditemukan.');
         }
 
         $user = $res->json();
-        return view('edituser', compact('user'));
+        return view('user_edit', compact('user'));
     }
 
     /**
