@@ -294,3 +294,7 @@ Kemudian
 ```
 php artisan serve
 ```
+Membuat Controller bisa pake ini
+```
+php artisan make:model nama_controller -mcr
+```
