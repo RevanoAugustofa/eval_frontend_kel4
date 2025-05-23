@@ -54,8 +54,7 @@
           name="level"
           id="level"
           required
-          class="rounded-md border border-gray-300 px-4 py-2 shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
-        >
+          class="rounded-md border border-gray-300 px-4 py-2 shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500">
           <option value="" disabled selected>-- Pilih Level --</option>
           <option value="admin">Admin</option>
           <option value="mahasiswa">Mahasiswa</option>

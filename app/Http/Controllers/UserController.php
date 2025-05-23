@@ -125,7 +125,7 @@ class UserController extends Controller
                 unset($validate['password']);
             }
 
-            Http::put("http://localhost:8080/user/$id", $validate);
+            Http::asForm()->put("http://localhost:8080/user/$id", $validate);
 
             return redirect()->route('user.index')->with('success', 'User berhasil diperbarui!');
         } catch (\Exception $e) {
